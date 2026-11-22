@@ -11,7 +11,7 @@ The active React frontend and modular FastAPI backend are under
 Install backend dependencies and start the web app with:
 
 ```sh
-python -m pip install -r app-react/requirements.txt
+./build.sh
 ./run.sh
 ```
 
