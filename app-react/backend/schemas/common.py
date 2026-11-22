@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from ..errors import ApiError
 
 _RICH_CONTENT_TAG = re.compile(
-    r"<\/?(?:p|div|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td)\b",
+    r"<\/?(?:p|div|h[1-6]|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td)\b",
     re.IGNORECASE,
 )
 

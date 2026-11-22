@@ -220,6 +220,59 @@ class ApiTests(unittest.TestCase):
         self.assertIn('style:name="Bold"', styles)
         self.assertIn('style:name="Italic"', styles)
 
+    def test_rule_section_crud_validation_and_export(self):
+        rule_section = {
+            "name": "  Combat  ",
+            "section_text": "<h2>Actions</h2><p>Use <strong>initiative</strong>.</p>",
+        }
+        status, created = self.call_api(
+            "/api/rule-sections", "POST", rule_section
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(created["name"], "Combat")
+        self.assertIn("initiative", created["section_text"])
+
+        status, duplicate = self.call_api(
+            "/api/rule-sections", "POST", rule_section
+        )
+        self.assertEqual(status, 409)
+        self.assertIn("already exists", duplicate["error"])
+
+        invalid = {"name": "Exploration", "section_text": "<p><br></p>"}
+        status, result = self.call_api(
+            "/api/rule-sections", "POST", invalid
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(result["error"], "Section text cannot be blank.")
+
+        created["section_text"] = "<p>Updated <em>combat rules</em>.</p>"
+        status, updated = self.call_api(
+            f"/api/rule-sections/{created['id']}", "PUT", created
+        )
+        self.assertEqual(status, 200)
+        self.assertIn("combat rules", updated["section_text"])
+
+        status, rows = self.call_api("/api/rule-sections")
+        self.assertEqual(status, 200)
+        self.assertEqual([row["name"] for row in rows], ["Combat"])
+
+        status, payload = self.call_api(
+            "/api/export/rule-sections?sort=Name"
+        )
+        self.assertEqual(status, 200)
+        with zipfile.ZipFile(BytesIO(payload)) as archive:
+            content = archive.read("content.xml").decode("utf-8")
+            styles = archive.read("styles.xml").decode("utf-8")
+        self.assertIn("Combat", content)
+        self.assertIn("combat rules", content)
+        self.assertIn('style:name="Italic"', styles)
+
+        status, result = self.call_api(
+            f"/api/rule-sections/{created['id']}", "DELETE"
+        )
+        self.assertEqual(status, 200)
+        self.assertTrue(result["deleted"])
+
     def test_character_class_crud_validation_and_export(self):
         character_class = {
             "name": "  Ranger  ",

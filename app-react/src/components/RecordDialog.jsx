@@ -3,23 +3,29 @@ import { libraryApi } from "../api/client";
 import {
   EMPTY_CHARACTER_CLASS,
   EMPTY_MONSTER,
+  EMPTY_RULE_SECTION,
   EMPTY_SPELL,
 } from "../config/records";
 import CharacterClassFields from "../features/character-classes/CharacterClassFields";
 import MonsterFields from "../features/monsters/MonsterFields";
 import SpellFields from "../features/spells/SpellFields";
+import RuleSectionFields from "../features/rule-sections/RuleSectionFields";
 import { countRichTextCharacters } from "../richText";
 import Modal from "./Modal";
 
 export default function RecordDialog({ kind, record, onClose, onSaved, onDelete }) {
   const isMonster = kind === "monsters";
   const isCharacterClass = kind === "character-classes";
+  const isRuleSection = kind === "rule-sections";
+  const isSpell = kind === "spells";
   const initial = record || (
     isMonster
       ? EMPTY_MONSTER
       : isCharacterClass
         ? EMPTY_CHARACTER_CLASS
-        : EMPTY_SPELL
+        : isRuleSection
+          ? EMPTY_RULE_SECTION
+          : EMPTY_SPELL
   );
   const [values, setValues] = useState({ ...initial });
   const [error, setError] = useState("");
@@ -36,11 +42,7 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
       setError("Summary cannot be blank.");
       return;
     }
-    if (
-      !isMonster &&
-      !isCharacterClass &&
-      countRichTextCharacters(values.effect) === 0
-    ) {
+    if (isSpell && countRichTextCharacters(values.effect) === 0) {
       setError("Effect cannot be blank.");
       return;
     }
@@ -51,6 +53,10 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
       setError("Progression table cannot be blank.");
       return;
     }
+    if (isRuleSection && countRichTextCharacters(values.section_text) === 0) {
+      setError("Section text cannot be blank.");
+      return;
+    }
     setSaving(true);
     try {
       if (record) {
@@ -58,13 +64,17 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
           ? libraryApi.updateMonster(record, values)
           : isCharacterClass
             ? libraryApi.updateCharacterClass(record, values)
-            : libraryApi.updateSpell(record, values));
+            : isRuleSection
+              ? libraryApi.updateRuleSection(record, values)
+              : libraryApi.updateSpell(record, values));
       } else {
         await (isMonster
           ? libraryApi.createMonster(values)
           : isCharacterClass
             ? libraryApi.createCharacterClass(values)
-            : libraryApi.createSpell(values));
+            : isRuleSection
+              ? libraryApi.createRuleSection(values)
+              : libraryApi.createSpell(values));
       }
       await onSaved();
     } catch (saveError) {
@@ -75,13 +85,19 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
   }
 
   const title = `${record ? "Edit" : "Add"} ${
-    isMonster ? "creature" : isCharacterClass ? "character class" : "incantation"
+    isMonster
+      ? "creature"
+      : isCharacterClass
+        ? "character class"
+        : isRuleSection
+          ? "rule section"
+          : "incantation"
   }`;
   return (
     <Modal onClose={onClose} labelledBy="record-dialog-title" wide>
       <div className="modal-heading">
         <div>
-          <div className="eyebrow">{isMonster ? "BESTIARY ENTRY" : isCharacterClass ? "CLASS ENTRY" : "SPELLBOOK ENTRY"}</div>
+          <div className="eyebrow">{isMonster ? "BESTIARY ENTRY" : isCharacterClass ? "CLASS ENTRY" : isRuleSection ? "RULES ENTRY" : "SPELLBOOK ENTRY"}</div>
           <h2 id="record-dialog-title">{title}</h2>
         </div>
         <button className="icon-close" onClick={onClose} aria-label="Close dialog">×</button>
@@ -91,7 +107,9 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
           ? <MonsterFields values={values} update={update} />
           : isCharacterClass
             ? <CharacterClassFields values={values} update={update} />
-            : <SpellFields values={values} update={update} />}
+            : isRuleSection
+              ? <RuleSectionFields values={values} update={update} />
+              : <SpellFields values={values} update={update} />}
         {error && <div className="alert error-alert" role="alert">{error}</div>}
         <div className="modal-actions">
           {record && (
@@ -99,9 +117,9 @@ export default function RecordDialog({ kind, record, onClose, onSaved, onDelete 
               type="button"
               className="button button-danger"
               onClick={onDelete}
-              aria-label={`Delete ${isMonster ? "monster" : isCharacterClass ? "character class" : "spell"} ${record.name}`}
+              aria-label={`Delete ${isMonster ? "monster" : isCharacterClass ? "character class" : isRuleSection ? "rule section" : "spell"} ${record.name}`}
             >
-              Delete {isMonster ? "monster" : isCharacterClass ? "character class" : "spell"}
+              Delete {isMonster ? "monster" : isCharacterClass ? "character class" : isRuleSection ? "rule section" : "spell"}
             </button>
           )}
           <span className="form-spacer" />

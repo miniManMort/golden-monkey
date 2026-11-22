@@ -14,7 +14,14 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 
 from . import database
 from .errors import ApiError
-from .routers import character_classes, exports, health, monsters, spells
+from .routers import (
+    character_classes,
+    exports,
+    health,
+    monsters,
+    rule_sections,
+    spells,
+)
 
 logger = logging.getLogger(__name__)
 DIST_DIR = Path(__file__).resolve().parents[1] / "dist"
@@ -75,6 +82,8 @@ def create_app() -> FastAPI:
                 label = "monster"
             elif "character_class" in error_text:
                 label = "character class"
+            elif "rule_section" in error_text:
+                label = "rule section"
             else:
                 label = "spell"
             message = f"A {label} with that name already exists."
@@ -103,6 +112,8 @@ def create_app() -> FastAPI:
     application.include_router(spells.router)
     application.include_router(character_classes.router)
     application.include_router(character_classes.alias_router)
+    application.include_router(rule_sections.router)
+    application.include_router(rule_sections.alias_router)
     application.include_router(exports.router)
 
     def serve_frontend(request_path: str) -> Response:

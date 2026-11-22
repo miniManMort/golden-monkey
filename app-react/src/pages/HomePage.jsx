@@ -1,4 +1,4 @@
-export default function HomePage({ monsters, spells, loading, onOpen, onCreate }) {
+export default function HomePage({ monsters, spells, ruleSections, loading, onOpen, onCreate }) {
   return (
     <>
       <section className="hero">

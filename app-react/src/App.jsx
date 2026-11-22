@@ -12,6 +12,7 @@ export default function App() {
   const [monsters, setMonsters] = useState([]);
   const [spells, setSpells] = useState([]);
   const [characterClasses, setCharacterClasses] = useState([]);
+  const [ruleSections, setRuleSections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [dialog, setDialog] = useState(null);
@@ -20,14 +21,16 @@ export default function App() {
   async function refreshRecords() {
     setLoadError("");
     try {
-      const [monsterRows, spellRows, characterClassRows] = await Promise.all([
+      const [monsterRows, spellRows, characterClassRows, ruleSectionRows] = await Promise.all([
         libraryApi.getMonsters(),
         libraryApi.getSpells(),
         libraryApi.getCharacterClasses(),
+        libraryApi.getRuleSections(),
       ]);
       setMonsters(monsterRows);
       setSpells(spellRows);
       setCharacterClasses(characterClassRows);
+      setRuleSections(ruleSectionRows);
     } catch (error) {
       setLoadError(error.message);
     } finally {
@@ -41,16 +44,21 @@ export default function App() {
 
   const isMonster = page === "monsters";
   const isCharacterClass = page === "character-classes";
+  const isRuleSection = page === "rule-sections";
   const activeItems = isMonster
     ? monsters
     : isCharacterClass
       ? characterClasses
-      : spells;
+      : isRuleSection
+        ? ruleSections
+        : spells;
   const title = isMonster
     ? "Monster registry"
     : isCharacterClass
       ? "Character classes"
-      : "Spellbook";
+      : isRuleSection
+        ? "Rule sections"
+        : "Spellbook";
 
   function openCreate(kind) {
     setDialog({ mode: "edit", kind, record: null });
@@ -61,14 +69,18 @@ export default function App() {
       ? "monster"
       : kind === "character-classes"
         ? "character class"
-        : "spell";
+        : kind === "rule-sections"
+          ? "rule section"
+          : "spell";
     if (!window.confirm(`Delete this ${recordType}, "${record.name}"? This cannot be undone. Continue?`)) return;
     try {
       await (kind === "monsters"
         ? libraryApi.deleteMonster(record)
         : kind === "character-classes"
           ? libraryApi.deleteCharacterClass(record)
-          : libraryApi.deleteSpell(record));
+          : kind === "rule-sections"
+            ? libraryApi.deleteRuleSection(record)
+            : libraryApi.deleteSpell(record));
       setDialog(null);
       await refreshRecords();
     } catch (error) {
@@ -96,6 +108,9 @@ export default function App() {
           </button>
           <button className={page === "character-classes" ? "nav-item active" : "nav-item"} onClick={() => setPage("character-classes")}>
             <span className="nav-icon">♜</span> Classes <span className="nav-count">{characterClasses.length}</span>
+          </button>
+          <button className={page === "rule-sections" ? "nav-item active" : "nav-item"} onClick={() => setPage("rule-sections")}>
+            <span className="nav-icon">§</span> Rules <span className="nav-count">{ruleSections.length}</span>
           </button>
         </nav>
         <div className="sidebar-bottom">
@@ -133,6 +148,7 @@ export default function App() {
               monsters={monsters}
               spells={spells}
               characterClasses={characterClasses}
+              ruleSections={ruleSections}
               loading={loading}
               onOpen={setPage}
               onCreate={openCreate}
@@ -147,14 +163,16 @@ export default function App() {
                     ? "Catalog creatures, their habits, and their hard-won statistics."
                     : isCharacterClass
                       ? "Maintain character classes, requirements, abilities, and progression."
-                      : "Keep every incantation, its reach, and its effects close at hand."}</p>
+                      : isRuleSection
+                        ? "Organize the rules and reference text for your campaign."
+                        : "Keep every incantation, its reach, and its effects close at hand."}</p>
                 </div>
                 <div className="heading-actions">
                   <button className="button button-outline" onClick={() => setDialog({ mode: "export", kind: page })}>
                     <span>↓</span> Export
                   </button>
                   <button className="button button-primary" onClick={() => openCreate(page)}>
-                    <span>＋</span> Add {isMonster ? "monster" : isCharacterClass ? "class" : "spell"}
+                    <span>＋</span> Add {isMonster ? "monster" : isCharacterClass ? "class" : isRuleSection ? "section" : "spell"}
                   </button>
                 </div>
               </div>

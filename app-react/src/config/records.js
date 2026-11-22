@@ -32,6 +32,11 @@ export const EMPTY_CHARACTER_CLASS = {
   progression_table: "",
 };
 
+export const EMPTY_RULE_SECTION = {
+  name: "",
+  section_text: "None",
+};
+
 export const MONSTER_COLUMNS = [
   ["name", "Name"],
   ["level", "Level"],
@@ -53,4 +58,8 @@ export const CHARACTER_CLASS_COLUMNS = [
   ["name", "Name"],
   ["hit_dice", "Hit Dice"],
   ["requirements", "Requirements"],
+];
+
+export const RULE_SECTION_COLUMNS = [
+  ["name", "Name"],
 ];

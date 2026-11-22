@@ -1,6 +1,6 @@
 import React from "react";
 
-const RICH_TAGS = "p|div|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td";
+const RICH_TAGS = "p|div|h1|h2|h3|h4|h5|h6|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td";
 const RICH_TAG_PATTERN = new RegExp(`<\\/?(?:${RICH_TAGS})\\b`, "i");
 const ALLOWED_TAGS = new Set(RICH_TAGS.split("|"));
 const DROP_CONTENT_TAGS = new Set(["script", "style", "iframe", "object"]);

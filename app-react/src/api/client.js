@@ -20,6 +20,7 @@ export const libraryApi = {
   getMonsters: () => request("/api/monsters"),
   getSpells: () => request("/api/spells"),
   getCharacterClasses: () => request("/api/character-classes"),
+  getRuleSections: () => request("/api/rule-sections"),
   createMonster: (value) => request("/api/monsters", {
     method: "POST",
     body: JSON.stringify(value),
@@ -52,6 +53,18 @@ export const libraryApi = {
   ),
   deleteCharacterClass: (record) => request(
     `/api/character-classes/${encodeURIComponent(record.id)}`,
+    { method: "DELETE" },
+  ),
+  createRuleSection: (value) => request("/api/rule-sections", {
+    method: "POST",
+    body: JSON.stringify(value),
+  }),
+  updateRuleSection: (record, value) => request(
+    `/api/rule-sections/${encodeURIComponent(record.id)}`,
+    { method: "PUT", body: JSON.stringify(value) },
+  ),
+  deleteRuleSection: (record) => request(
+    `/api/rule-sections/${encodeURIComponent(record.id)}`,
     { method: "DELETE" },
   ),
   exportRecords: (kind, sort) => request(

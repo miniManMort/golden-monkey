@@ -10,7 +10,9 @@ export default function ExportDialog({ kind, onClose }) {
     ? "monster"
     : kind === "character-classes"
       ? "character class"
-      : "spell";
+      : kind === "rule-sections"
+        ? "rule section"
+        : "spell";
 
   async function exportRecords(event) {
     event.preventDefault();
@@ -48,7 +50,9 @@ export default function ExportDialog({ kind, onClose }) {
             <option>Name</option>
             {kind === "character-classes"
               ? <option>Hit Dice / Name</option>
-              : <option>Level / Name</option>}
+              : kind !== "rule-sections"
+                ? <option>Level / Name</option>
+                : null}
           </select>
         </label>
         {error && <div className="alert error-alert" role="alert">{error}</div>}

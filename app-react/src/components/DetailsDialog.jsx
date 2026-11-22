@@ -15,6 +15,8 @@ export default function DetailsDialog({ kind, record, onClose, onEdit }) {
           ["Hit Dice", "hit_dice"], ["Combat Skills", "combat_skills"],
           ["Other Skills", "other_skills"], ["Progression Table", "progression_table"],
         ]
+      : kind === "rule-sections"
+        ? [["Section Text", "section_text"]]
       : [
         ["Level", "level"], ["Save allowed", "save_allowed"],
         ["Range", "range"], ["Duration", "duration"], ["Effect", "effect"],
@@ -23,7 +25,7 @@ export default function DetailsDialog({ kind, record, onClose, onEdit }) {
     <Modal onClose={onClose} labelledBy="details-title">
       <div className="modal-heading">
         <div>
-          <div className="eyebrow">{kind === "monsters" ? "CREATURE PROFILE" : kind === "character-classes" ? "CHARACTER CLASS PROFILE" : "SPELL PROFILE"}</div>
+          <div className="eyebrow">{kind === "monsters" ? "CREATURE PROFILE" : kind === "character-classes" ? "CHARACTER CLASS PROFILE" : kind === "rule-sections" ? "RULE SECTION" : "SPELL PROFILE"}</div>
           <h2 id="details-title">{record.name}</h2>
         </div>
         <button className="icon-close" onClick={onClose} aria-label="Close dialog">×</button>
@@ -33,8 +35,8 @@ export default function DetailsDialog({ kind, record, onClose, onEdit }) {
         {fields.map(([label, key]) => (
           <div className="detail-row" key={key}>
             <dt>{label}</dt>
-            <dd className={["summary", "effect", "specials", "progression_table"].includes(key) ? "detail-long" : ""}>
-              {["summary", "effect", "specials", "progression_table"].includes(key)
+            <dd className={["summary", "effect", "specials", "progression_table", "section_text"].includes(key) ? "detail-long" : ""}>
+              {["summary", "effect", "specials", "progression_table", "section_text"].includes(key)
                 ? renderRichText(record[key])
                 : record[key]}
             </dd>

@@ -28,6 +28,7 @@ application. The plans below are ordered by task number.
 | [19](plans/task-19.md) | Completed | Replace the custom rich-text editor with TinyMCE while preserving data and supported HTML. |
 | [20](plans/task-20.md) | Completed | Recommend and implement maintainability improvements across the frontend and backend. |
 | [21](plans/task-21.md) | Completed | Add character class management: navigation, list/view/edit summaries, and create workflows. |
+| [22](plans/task-22.md) | Completed | Add pages to manage rule section records, including navigation, listing, creation, viewing, editing, and deletion. |
 
 ## Progress overview
 
@@ -35,3 +36,4 @@ application. The plans below are ordered by task number.
 - Tasks 13 proposes spell ODT extraction but is not marked completed.
 - Tasks 14-17 establish and document the React/FastAPI implementation.
 - Tasks 18-21 add rich-text support, architectural cleanup, and character class management.
+- Task 22 adds rule section management pages and ODT export support.

@@ -2,17 +2,21 @@ import { useMemo, useState } from "react";
 import {
   CHARACTER_CLASS_COLUMNS,
   MONSTER_COLUMNS,
+  RULE_SECTION_COLUMNS,
   SPELL_COLUMNS,
 } from "../config/records";
 
 export default function RecordTable({ kind, records, onView, onEdit }) {
   const isMonster = kind === "monsters";
   const isCharacterClass = kind === "character-classes";
+  const isRuleSection = kind === "rule-sections";
   const columns = isMonster
     ? MONSTER_COLUMNS
     : isCharacterClass
       ? CHARACTER_CLASS_COLUMNS
-      : SPELL_COLUMNS;
+      : isRuleSection
+        ? RULE_SECTION_COLUMNS
+        : SPELL_COLUMNS;
   const [field, setField] = useState("name");
   const [query, setQuery] = useState("");
   const [applied, setApplied] = useState({ field: "name", query: "" });
@@ -45,7 +49,9 @@ export default function RecordTable({ kind, records, onView, onEdit }) {
                 ? [["name", "Name"], ["level", "Level"], ["alignment", "Alignment"]]
                 : isCharacterClass
                   ? [["name", "Name"], ["hit_dice", "Hit Dice"], ["requirements", "Requirements"]]
-                  : [["name", "Name"], ["level", "Level"]]
+                  : isRuleSection
+                    ? [["name", "Name"]]
+                    : [["name", "Name"], ["level", "Level"]]
               ).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
               ))}

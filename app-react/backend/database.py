@@ -62,6 +62,13 @@ def initialize_database() -> None:
                 progression_table TEXT NOT NULL
             )"""
         )
+        connection.execute(
+            """CREATE TABLE IF NOT EXISTS rule_section (
+                id TEXT NOT NULL PRIMARY KEY,
+                name TEXT NOT NULL UNIQUE,
+                section_text TEXT NOT NULL DEFAULT 'None'
+            )"""
+        )
         columns = {
             row[1] for row in connection.execute('PRAGMA table_info("monster")')
         }

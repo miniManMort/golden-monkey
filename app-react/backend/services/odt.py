@@ -12,6 +12,7 @@ from io import BytesIO
 from ..schemas.monster import MonsterRead
 from ..schemas.spell import SpellRead
 from ..schemas.character_class import CharacterClassRead
+from ..schemas.rule_section import RuleSectionRead
 
 ODT_MIMETYPE = "application/vnd.oasis.opendocument.text"
 OFFICE_NS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"
@@ -21,7 +22,7 @@ TABLE_NS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 FO_NS = "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
 
 _RICH_TEXT_TAGS = re.compile(
-    r"<\/?(?:p|div|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td)\b",
+    r"<\/?(?:p|div|h[1-6]|br|strong|b|em|i|ul|ol|li|table|thead|tbody|tr|th|td)\b",
     re.IGNORECASE,
 )
 _DROP_CONTENT_TAGS = {"script", "style", "iframe", "object"}
@@ -370,6 +371,34 @@ def _make_character_class_content(
     return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 
+def _make_rule_section_content(rule_sections: list[RuleSectionRead]) -> bytes:
+    root = ET.Element(
+        _tag(OFFICE_NS, "document-content"),
+        {_tag(OFFICE_NS, "version"): "1.2"},
+    )
+    ET.SubElement(root, _tag(OFFICE_NS, "automatic-styles"))
+    text = ET.SubElement(
+        ET.SubElement(root, _tag(OFFICE_NS, "body")), _tag(OFFICE_NS, "text")
+    )
+    title = ET.SubElement(
+        text, _tag(TEXT_NS, "h"), {_tag(TEXT_NS, "outline-level"): "1"}
+    )
+    title.text = "Rule Sections"
+    table_counter = [0]
+    for rule_section in rule_sections:
+        heading = ET.SubElement(
+            text,
+            _tag(TEXT_NS, "h"),
+            {
+                _tag(TEXT_NS, "outline-level"): "2",
+                _tag(TEXT_NS, "style-name"): "Heading_20_2",
+            },
+        )
+        _set_multiline_text(heading, rule_section.name)
+        _append_rich_content(text, rule_section.section_text, table_counter)
+    return ET.tostring(root, encoding="utf-8", xml_declaration=True)
+
+
 def _make_styles() -> bytes:
     root = ET.Element(
         _tag(OFFICE_NS, "document-styles"),
@@ -459,3 +488,7 @@ def export_character_classes(
     character_classes: list[CharacterClassRead],
 ) -> bytes:
     return _make_odt(_make_character_class_content(character_classes))
+
+
+def export_rule_sections(rule_sections: list[RuleSectionRead]) -> bytes:
+    return _make_odt(_make_rule_section_content(rule_sections))

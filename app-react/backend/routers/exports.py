@@ -3,11 +3,12 @@
 from fastapi import APIRouter
 from fastapi.responses import Response
 
-from ..repositories import character_classes, monsters, spells
+from ..repositories import character_classes, monsters, rule_sections, spells
 from ..services.odt import (
     ODT_MIMETYPE,
     export_character_classes,
     export_monsters,
+    export_rule_sections,
     export_spells,
 )
 
@@ -51,3 +52,20 @@ def export_character_class_profiles(sort: str = "Name") -> Response:
 @router.get("/character_classes")
 def export_character_class_profiles_alias(sort: str = "Name") -> Response:
     return export_character_class_profiles(sort)
+
+
+@router.get("/rule-sections")
+def export_rule_section_profiles(sort: str = "Name") -> Response:
+    payload = export_rule_sections(rule_sections.list_rule_sections(sort))
+    return Response(
+        content=payload,
+        media_type=ODT_MIMETYPE,
+        headers={
+            "Content-Disposition": 'attachment; filename="rule-sections.odt"'
+        },
+    )
+
+
+@router.get("/rule_sections")
+def export_rule_section_profiles_alias(sort: str = "Name") -> Response:
+    return export_rule_section_profiles(sort)
