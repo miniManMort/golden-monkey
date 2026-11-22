@@ -29,6 +29,7 @@ application. The plans below are ordered by task number.
 | [20](plans/task-20.md) | Completed | Recommend and implement maintainability improvements across the frontend and backend. |
 | [21](plans/task-21.md) | Completed | Add character class management: navigation, list/view/edit summaries, and create workflows. |
 | [22](plans/task-22.md) | Completed | Add pages to manage rule section records, including navigation, listing, creation, viewing, editing, and deletion. |
+| [23](plans/task-23.md) | Completed | Update the home page to summarize and provide actions for the complete application library. |
 
 ## Progress overview
 
@@ -37,3 +38,4 @@ application. The plans below are ordered by task number.
 - Tasks 14-17 establish and document the React/FastAPI implementation.
 - Tasks 18-21 add rich-text support, architectural cleanup, and character class management.
 - Task 22 adds rule section management pages and ODT export support.
+- Task 23 updates the home page for the complete application library.

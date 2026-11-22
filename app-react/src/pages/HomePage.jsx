@@ -1,13 +1,21 @@
-export default function HomePage({ monsters, spells, ruleSections, loading, onOpen, onCreate }) {
+export default function HomePage({
+  monsters,
+  spells,
+  characterClasses,
+  ruleSections,
+  loading,
+  onOpen,
+  onCreate,
+}) {
   return (
     <>
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow hero-eyebrow"><span className="sparkle">✳</span> YOUR CAMPAIGN COMPENDIUM</div>
           <h1>A place for<br />the <em>extraordinary.</em></h1>
-          <p>Every creature has a story. Every spell has a purpose. Keep the details of your world together, ready for whatever comes next.</p>
+          <p>Every creature has a story. Every class has a calling. Keep monsters, spells, character classes, and rule sections together, ready for whatever comes next.</p>
           <div className="hero-actions">
-            <button className="button button-light" onClick={() => onOpen("monsters")}>Explore your library <span>→</span></button>
+            <button className="button button-light" onClick={() => onOpen("monsters")}>Explore your registries <span>→</span></button>
             <button className="text-button hero-add" onClick={() => onCreate("monsters")}>＋ Add a creature</button>
           </div>
         </div>
@@ -31,10 +39,15 @@ export default function HomePage({ monsters, spells, ruleSections, loading, onOp
           <div><span className="stat-label">INCANTATIONS</span><strong>{loading ? "—" : spells.length}</strong><span className="stat-sub">in your spellbook</span></div>
           <button className="stat-arrow" onClick={() => onOpen("spells")} aria-label="Open spells">↗</button>
         </article>
-        <article className="quote-card">
-          <span className="quote-mark">“</span>
-          <p>Knowledge is the finest equipment a traveler can carry.</p>
-          <span className="quote-credit">— THE WAYFARER'S HANDBOOK</span>
+        <article className="stat-card">
+          <div className="stat-icon class-icon">♜</div>
+          <div><span className="stat-label">CHARACTER CLASSES</span><strong>{loading ? "—" : characterClasses.length}</strong><span className="stat-sub">in your handbook</span></div>
+          <button className="stat-arrow" onClick={() => onOpen("character-classes")} aria-label="Open character classes">↗</button>
+        </article>
+        <article className="stat-card">
+          <div className="stat-icon rule-icon">§</div>
+          <div><span className="stat-label">RULE SECTIONS</span><strong>{loading ? "—" : ruleSections.length}</strong><span className="stat-sub">for quick reference</span></div>
+          <button className="stat-arrow" onClick={() => onOpen("rule-sections")} aria-label="Open rule sections">↗</button>
         </article>
       </section>
 
@@ -54,10 +67,15 @@ export default function HomePage({ monsters, spells, ruleSections, loading, onOp
             <strong>Record an incantation</strong><span>Save a spell's range, duration, and all the ways it changes a day.</span>
             <span className="card-link">Create spell <b>→</b></span>
           </button>
-          <button className="start-card" onClick={() => onOpen("monsters")}>
-            <span className="card-number">03 / YOUR LIBRARY</span><span className="card-symbol">⌕</span>
-            <strong>Find a detail</strong><span>Search your notes, revisit a familiar face, or prepare for what's ahead.</span>
-            <span className="card-link">Browse library <b>→</b></span>
+          <button className="start-card" onClick={() => onCreate("character-classes")}>
+            <span className="card-number">03 / CHARACTER CLASSES</span><span className="card-symbol">♜</span>
+            <strong>Shape a calling</strong><span>Document requirements, abilities, progression, and the path each class follows.</span>
+            <span className="card-link">Create character class <b>→</b></span>
+          </button>
+          <button className="start-card" onClick={() => onCreate("rule-sections")}>
+            <span className="card-number">04 / RULES</span><span className="card-symbol">§</span>
+            <strong>Add a rule section</strong><span>Keep campaign rulings and reference material clear, searchable, and close at hand.</span>
+            <span className="card-link">Create rule section <b>→</b></span>
           </button>
         </div>
       </section>

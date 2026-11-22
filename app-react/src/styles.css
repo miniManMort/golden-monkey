@@ -89,11 +89,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .art-label { position: absolute; right: 12%; bottom: 18px; color: #b6b9ad; font-size: 8px; letter-spacing: 1.6px; }
 .art-label i { padding: 0 5px; color: #d3b77f; font-style: normal; }
 
-.stats-row { display: grid; grid-template-columns: 1fr 1fr 1.12fr; gap: 12px; margin-top: 17px; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 17px; }
 .stat-card { min-height: 92px; position: relative; display: flex; align-items: center; gap: 13px; padding: 15px; border: 1px solid var(--line); background: var(--paper); }
 .stat-icon { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 50%; font-size: 17px; }
 .monster-icon { background: #e9eee8; color: #45634e; }
 .spell-icon { background: #f3eddf; color: #a2854f; }
+.class-icon { background: #e7edf0; color: #526976; }
+.rule-icon { background: #eee7ef; color: #745d7a; }
 .stat-card > div:nth-child(2) { display: grid; }
 .stat-label { color: #94968e; font-size: 8px; letter-spacing: 1.5px; }
 .stat-card strong { margin: 2px 0 0; font-family: var(--font-sans); font-size: 21px; font-weight: 500; line-height: 1.1; }
@@ -108,7 +110,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .section-title { display: flex; align-items: end; justify-content: space-between; margin-bottom: 15px; }
 .section-title h2 { margin: 6px 0 0; font-family: var(--font-sans); font-size: 22px; font-weight: 500; }
 .section-aside { padding-bottom: 3px; color: #96978e; font-family: var(--font-sans); font-size: 11px; font-style: italic; }
-.start-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.start-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .start-card { min-height: 165px; position: relative; display: flex; flex-direction: column; align-items: flex-start; padding: 16px 16px 14px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); text-align: left; transition: border-color .15s, transform .15s; }
 .start-card:hover { border-color: #bfc9be; transform: translateY(-2px); }
 .card-number { color: #99917f; font-size: 8px; letter-spacing: 1.35px; }
@@ -223,7 +225,7 @@ tbody tr:hover { background: #fcfbf7; }
   .sidebar { width: 205px; }
   .main-area { margin-left: 205px; }
   .stats-row { grid-template-columns: 1fr 1fr; }
-  .quote-card { grid-column: 1 / -1; }
+  .start-grid { grid-template-columns: 1fr 1fr; }
   .page-content { padding-right: 4%; padding-left: 4%; }
 }
 @media (max-width: 760px) {

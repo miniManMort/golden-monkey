@@ -1,15 +1,16 @@
 # Golden Monkey Architecture
 
-Golden Monkey is a React web application for managing monster and spell
-profiles. The active application is under [app-react](../app-react); the
+Golden Monkey is a React web application for managing monsters, spells,
+character classes, and rule sections. The active application is under [app-react](../app-react); the
 previous Python and Rust desktop applications are preserved for reference only
 under [archive](../archive).
 
 ## Active application
 
 The frontend is a React/Vite single-page application in
-[app-react/src](../app-react/src). It provides the overview, monster and spell
-registries, profile forms, searches, detail views, and ODT export controls.
+[app-react/src](../app-react/src). It provides the overview and registries for
+monsters, spells, character classes, and rule sections, including profile forms,
+searches, detail views, and ODT export controls.
 
 The FastAPI backend is organized as a Python package in
 [app-react/backend](../app-react/backend):
