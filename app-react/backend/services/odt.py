@@ -198,6 +198,18 @@ def _append_rich_content(
         elif child.tag in {"p", "div"}:
             paragraph = ET.SubElement(element, _tag(TEXT_NS, "p"))
             _append_inline(paragraph, child.children)
+        elif child.tag in {"h1", "h2", "h3", "h4", "h5", "h6"}:
+            paragraph = None
+            level = int(child.tag[1])
+            heading = ET.SubElement(
+                element,
+                _tag(TEXT_NS, "h"),
+                {
+                    _tag(TEXT_NS, "outline-level"): str(level),
+                    _tag(TEXT_NS, "style-name"): f"Heading_20_{level}",
+                },
+            )
+            _append_inline(heading, child.children)
         elif child.tag in {"ul", "ol"}:
             paragraph = None
             _append_list(element, child)
@@ -405,29 +417,30 @@ def _make_styles() -> bytes:
         {_tag(OFFICE_NS, "version"): "1.2"},
     )
     styles = ET.SubElement(root, _tag(OFFICE_NS, "styles"))
-    heading_style = ET.SubElement(
-        styles,
-        _tag(STYLE_NS, "style"),
-        {
-            _tag(STYLE_NS, "name"): "Heading_20_2",
-            _tag(STYLE_NS, "display-name"): "Heading 2",
-            _tag(STYLE_NS, "family"): "paragraph",
-        },
-    )
-    ET.SubElement(
-        heading_style,
-        _tag(STYLE_NS, "paragraph-properties"),
-        {
-            _tag(FO_NS, "margin-top"): "0.18in",
-            _tag(FO_NS, "margin-bottom"): "0.08in",
-            _tag(FO_NS, "keep-with-next"): "always",
-        },
-    )
-    ET.SubElement(
-        heading_style,
-        _tag(STYLE_NS, "text-properties"),
-        {_tag(FO_NS, "font-size"): "14pt", _tag(FO_NS, "font-weight"): "bold"},
-    )
+    for level, font_size in ((1, "18pt"), (2, "16pt"), (3, "14pt"), (4, "12pt"), (5, "11pt"), (6, "10pt")):
+        heading_style = ET.SubElement(
+            styles,
+            _tag(STYLE_NS, "style"),
+            {
+                _tag(STYLE_NS, "name"): f"Heading_20_{level}",
+                _tag(STYLE_NS, "display-name"): f"Heading {level}",
+                _tag(STYLE_NS, "family"): "paragraph",
+            },
+        )
+        ET.SubElement(
+            heading_style,
+            _tag(STYLE_NS, "paragraph-properties"),
+            {
+                _tag(FO_NS, "margin-top"): "0.18in",
+                _tag(FO_NS, "margin-bottom"): "0.08in",
+                _tag(FO_NS, "keep-with-next"): "always",
+            },
+        )
+        ET.SubElement(
+            heading_style,
+            _tag(STYLE_NS, "text-properties"),
+            {_tag(FO_NS, "font-size"): font_size, _tag(FO_NS, "font-weight"): "bold"},
+        )
     for name, properties in (
         ("Bold", {_tag(FO_NS, "font-weight"): "bold"}),
         ("Italic", {_tag(FO_NS, "font-style"): "italic"}),

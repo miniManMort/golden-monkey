@@ -223,7 +223,7 @@ class ApiTests(unittest.TestCase):
     def test_rule_section_crud_validation_and_export(self):
         rule_section = {
             "name": "  Combat  ",
-            "section_text": "<h2>Actions</h2><p>Use <strong>initiative</strong>.</p>",
+            "section_text": "<h1>Combat</h1><h2>Actions</h2><p>Use <strong>initiative</strong>.</p>",
         }
         status, created = self.call_api(
             "/api/rule-sections", "POST", rule_section
@@ -245,7 +245,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertEqual(result["error"], "Section text cannot be blank.")
 
-        created["section_text"] = "<p>Updated <em>combat rules</em>.</p>"
+        created["section_text"] = "<h2>Updated combat rules</h2><p>Use <em>initiative</em>.</p>"
         status, updated = self.call_api(
             f"/api/rule-sections/{created['id']}", "PUT", created
         )
@@ -264,6 +264,9 @@ class ApiTests(unittest.TestCase):
             content = archive.read("content.xml").decode("utf-8")
             styles = archive.read("styles.xml").decode("utf-8")
         self.assertIn("Combat", content)
+        self.assertIn("Combat</text:h>", content)
+        self.assertIn('text:outline-level="1"', content)
+        self.assertIn('text:outline-level="2"', content)
         self.assertIn("combat rules", content)
         self.assertIn('style:name="Italic"', styles)
 
