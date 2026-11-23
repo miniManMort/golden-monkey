@@ -100,17 +100,17 @@ export default function App() {
           <button className={page === "home" ? "nav-item active" : "nav-item"} onClick={() => setPage("home")}>
             <span className="nav-icon">⌂</span> Overview
           </button>
-          <button className={page === "monsters" ? "nav-item active" : "nav-item"} onClick={() => setPage("monsters")}>
-            <span className="nav-icon">♞</span> Monsters <span className="nav-count">{monsters.length}</span>
-          </button>
-          <button className={page === "spells" ? "nav-item active" : "nav-item"} onClick={() => setPage("spells")}>
-            <span className="nav-icon">✳</span> Spells <span className="nav-count">{spells.length}</span>
+          <button className={page === "rule-sections" ? "nav-item active" : "nav-item"} onClick={() => setPage("rule-sections")}>
+            <span className="nav-icon">§</span> Rules <span className="nav-count">{ruleSections.length}</span>
           </button>
           <button className={page === "character-classes" ? "nav-item active" : "nav-item"} onClick={() => setPage("character-classes")}>
             <span className="nav-icon">♜</span> Classes <span className="nav-count">{characterClasses.length}</span>
           </button>
-          <button className={page === "rule-sections" ? "nav-item active" : "nav-item"} onClick={() => setPage("rule-sections")}>
-            <span className="nav-icon">§</span> Rules <span className="nav-count">{ruleSections.length}</span>
+          <button className={page === "spells" ? "nav-item active" : "nav-item"} onClick={() => setPage("spells")}>
+            <span className="nav-icon">✳</span> Spells <span className="nav-count">{spells.length}</span>
+          </button>
+          <button className={page === "monsters" ? "nav-item active" : "nav-item"} onClick={() => setPage("monsters")}>
+            <span className="nav-icon">♞</span> Monsters <span className="nav-count">{monsters.length}</span>
           </button>
         </nav>
         <div className="sidebar-bottom">

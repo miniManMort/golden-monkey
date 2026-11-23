@@ -30,6 +30,7 @@ application. The plans below are ordered by task number.
 | [21](plans/task-21.md) | Completed | Add character class management: navigation, list/view/edit summaries, and create workflows. |
 | [22](plans/task-22.md) | Completed | Add pages to manage rule section records, including navigation, listing, creation, viewing, editing, and deletion. |
 | [23](plans/task-23.md) | Completed | Update the home page to summarize and provide actions for the complete application library. |
+| [24](plans/task-24.md) | Completed | Reorder left-side menus and home-page widgets to show rules, classes, spells, and monsters. |
 
 ## Progress overview
 
@@ -39,3 +40,4 @@ application. The plans below are ordered by task number.
 - Tasks 18-21 add rich-text support, architectural cleanup, and character class management.
 - Task 22 adds rule section management pages and ODT export support.
 - Task 23 updates the home page for the complete application library.
+- Task 24 orders the left-side menus and home-page widgets as rules, classes, spells, and monsters.
